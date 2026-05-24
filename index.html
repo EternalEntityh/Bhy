@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feliz Cumpleaños</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-deep:        #0a0b0f;
+      --bg-mid:         #0e1018;
+      --gold-pale:      #c9a96e;
+      --gold-dim:       #7a5f35;
+      --ink:            #d4cfc7;
+      --ink-muted:      #8a8278;
+      --ink-faint:      #4a4640;
+      --glass-bg:       rgba(18, 20, 28, 0.72);
+      --glass-border:   rgba(201, 169, 110, 0.14);
+      --shadow-deep:    0 40px 120px rgba(0,0,0,0.85), 0 8px 32px rgba(0,0,0,0.6);
+      --shadow-gold:    0 0 80px rgba(140, 100, 40, 0.12);
+    }
+
+    html, body {
+      min-height: 100%;
+      background-color: var(--bg-deep);
+      color: var(--ink);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── Grain overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 180px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.55;
+    }
+
+    /* ── Ambient glow ── */
+    .ambient {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(90px);
+      opacity: 0;
+      animation: glowIn 3s ease-out 0.4s forwards;
+    }
+    .ambient-1 {
+      width: 600px; height: 600px;
+      top: -160px; left: -160px;
+      background: radial-gradient(circle, rgba(100,75,35,0.22) 0%, transparent 70%);
+    }
+    .ambient-2 {
+      width: 500px; height: 500px;
+      bottom: -120px; right: -120px;
+      background: radial-gradient(circle, rgba(30,40,80,0.30) 0%, transparent 70%);
+    }
+
+    @keyframes glowIn {
+      to { opacity: 1; }
+    }
+
+    /* ── Page layout ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+    }
+
+    /* ── Card ── */
+    .card {
+      width: 100%;
+      max-width: 720px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 4px;
+      backdrop-filter: blur(24px) saturate(140%);
+      -webkit-backdrop-filter: blur(24px) saturate(140%);
+      box-shadow: var(--shadow-deep), var(--shadow-gold);
+      padding: 72px 80px;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: cardReveal 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+    }
+
+    @keyframes cardReveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Corner ornaments */
+    .card::before,
+    .card::after {
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-color: var(--gold-dim);
+      border-style: solid;
+      opacity: 0.5;
+    }
+    .card::before {
+      top: 24px; left: 24px;
+      border-width: 1px 0 0 1px;
+    }
+    .card::after {
+      bottom: 24px; right: 24px;
+      border-width: 0 1px 1px 0;
+    }
+
+    /* Inner top line */
+    .card-inner-top,
+    .card-inner-bottom {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 96px);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+      opacity: 0.35;
+    }
+    .card-inner-top  { top: 44px; }
+    .card-inner-bottom { bottom: 44px; }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 52px;
+      opacity: 0;
+      animation: fadeUp 1s ease-out 0.9s forwards;
+    }
+
+    .eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold-pale);
+      opacity: 0.65;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .title {
+      font-family: 'Cinzel', serif;
+      font-weight: 400;
+      font-size: clamp(26px, 5vw, 38px);
+      letter-spacing: 0.05em;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+
+    .title em {
+      font-style: italic;
+      color: var(--gold-pale);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1em;
+      font-weight: 300;
+    }
+
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .ornament-line {
+      height: 1px;
+      width: 70px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim));
+    }
+    .ornament-line.r {
+      background: linear-gradient(90deg, var(--gold-dim), transparent);
+    }
+
+    .ornament-diamond {
+      width: 6px;
+      height: 6px;
+      background: var(--gold-pale);
+      transform: rotate(45deg);
+      opacity: 0.7;
+    }
+
+    /* ── Body text ── */
+    .letter-body {
+      opacity: 0;
+      animation: fadeUp 1s ease-out 1.2s forwards;
+    }
+
+    .letter-body p {
+      font-family: 'EB Garamond', 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(16px, 2.2vw, 18.5px);
+      line-height: 1.95;
+      color: var(--ink);
+      margin-bottom: 28px;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+    }
+
+    .letter-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .letter-body p.drop::first-letter {
+      font-family: 'Cinzel', serif;
+      font-size: 3.2em;
+      float: left;
+      line-height: 0.78;
+      margin-right: 8px;
+      margin-top: 6px;
+      color: var(--gold-pale);
+      font-weight: 400;
+    }
+
+    .letter-body p.highlight {
+      font-style: italic;
+      color: #c0bab2;
+      padding-left: 20px;
+      border-left: 1px solid var(--gold-dim);
+      opacity: 0.9;
+    }
+
+    .letter-body p.closing {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(17px, 2.4vw, 20px);
+      color: var(--gold-pale);
+      margin-top: 44px;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      margin-top: 60px;
+      opacity: 0;
+      animation: fadeUp 1s ease-out 1.5s forwards;
+    }
+
+    .footer-ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .footer-dot {
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: var(--gold-dim);
+      opacity: 0.7;
+    }
+
+    .footer-line-h {
+      height: 1px; width: 50px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+      opacity: 0.5;
+    }
+
+    .footer-text {
+      font-family: 'Cinzel', serif;
+      font-size: 8px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    /* ── Hover effect on card ── */
+    .card {
+      transition: box-shadow 0.8s ease, border-color 0.8s ease;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-deep), 0 0 120px rgba(180, 130, 55, 0.16);
+      border-color: rgba(201, 169, 110, 0.22);
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .card {
+        padding: 52px 32px 52px 32px;
+        border-radius: 3px;
+      }
+      .card-inner-top,
+      .card-inner-bottom {
+        width: calc(100% - 56px);
+      }
+      .card::before { top: 16px; left: 16px; width: 40px; height: 40px; }
+      .card::after  { bottom: 16px; right: 16px; width: 40px; height: 40px; }
+      .card-inner-top  { top: 32px; }
+      .card-inner-bottom { bottom: 32px; }
+      .header { margin-bottom: 40px; }
+      .letter-body p { font-size: 16px; line-height: 1.85; }
+    }
+
+    @media (max-width: 400px) {
+      .page { padding: 32px 12px; }
+      .card { padding: 44px 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient glows -->
+  <div class="ambient ambient-1"></div>
+  <div class="ambient ambient-2"></div>
+
+  <main class="page">
+    <article class="card" role="article" aria-label="Carta de cumpleaños">
+
+      <!-- Decorative lines inside card -->
+      <div class="card-inner-top"></div>
+      <div class="card-inner-bottom"></div>
+
+      <!-- Header -->
+      <header class="header">
+        <span class="eyebrow">Una carta para ti</span>
+        <h1 class="title">Feliz Cumpleaños,<br><em>hermano</em></h1>
+        <div class="ornament">
+          <div class="ornament-line"></div>
+          <div class="ornament-diamond"></div>
+          <div class="ornament-line r"></div>
+        </div>
+      </header>
+
+      <!-- Letter body -->
+      <section class="letter-body">
+
+        <p class="drop">Quiero que sepas que hoy sigue siendo un día especial, aunque quizás ya no lo veas de esa forma. Hoy es un día para recordar todo: los días buenos, los malos y cada esfuerzo que hiciste incluso cuando nadie lo notó.</p>
+
+        <p>Has cargado cosas que muchos jamás entenderían y aun así seguiste adelante. Y sinceramente, te felicito por algo que pensé que nunca vería: salir de esa insensibilidad y ese ego con el que muchas veces vivimos.</p>
+
+        <p class="highlight">Verte amar de verdad, verte enamorado a ese nivel y construir algo real con tu mujer me sorprendió muchísimo… pero más que sorprenderme, me hizo sentir orgulloso de ti.</p>
+
+        <p>Orgulloso de tus logros, de tus metas, de la persona en la que te convertiste y, sobre todo, de verte feliz. Porque después de todo lo vivido, sé que no fue fácil llegar hasta donde estás hoy.</p>
+
+        <p>Espero que este nuevo año de vida te traiga todavía más paz, más motivos para seguir adelante y más momentos que te hagan sentir que todo valió la pena.</p>
+
+        <p class="closing">Feliz cumpleaños, hermano. De verdad.</p>
+
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="footer-ornament">
+          <div class="footer-dot"></div>
+          <div class="footer-line-h"></div>
+          <div class="footer-dot"></div>
+          <div class="footer-line-h"></div>
+          <div class="footer-dot"></div>
+        </div>
+        <p class="footer-text">Con todo el respeto y el cariño del mundo</p>
+      </footer>
+
+    </article>
+  </main>
+
+</body>
+</html>
